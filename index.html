@@ -1,0 +1,64 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101326">
+  <meta name="description" content="Play Ring Escape, a relaxing and challenging ring untangling puzzle game.">
+  <title>Ring Escape - Relaxing Ring Puzzle</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="brand">⭕ RING ESCAPE</div>
+      <div class="coins">🪙 <span id="coins">100</span></div>
+    </header>
+
+    <section class="stats">
+      <div>LEVEL <strong id="level">1</strong></div>
+      <div>MOVES <strong id="moves">0</strong></div>
+      <div>BEST <strong id="best">0</strong></div>
+    </section>
+
+    <section class="game-card">
+      <div class="heading">
+        <h1>Untangle the Rings</h1>
+        <p>Rotate the rings until they can be separated!</p>
+      </div>
+
+      <div class="puzzle" id="puzzle">
+        <canvas id="gameCanvas"></canvas>
+      </div>
+
+      <div class="instructions">
+        Drag the rings or tap a ring to rotate it.
+      </div>
+
+      <div class="controls">
+        <button id="undo">↶ Undo</button>
+        <button id="hint">💡 Hint</button>
+        <button id="reset">↻ Reset</button>
+      </div>
+
+      <button id="next" class="next-button" hidden>
+        NEXT LEVEL →
+      </button>
+    </section>
+
+    <section class="bottom-info">
+      <div>🧠 Train your brain</div>
+      <div>✨ Relax and play</div>
+      <div>🏆 Beat your best</div>
+    </section>
+
+    <footer>
+      <p>Ring Escape © 2026</p>
+      <a href="privacy.html">Privacy Policy</a>
+    </footer>
+  </main>
+
+  <script src="game.js"></script>
+</body>
+</html>

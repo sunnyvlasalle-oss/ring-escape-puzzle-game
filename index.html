@@ -2,63 +2,773 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#101326">
-  <meta name="description" content="Play Ring Escape, a relaxing and challenging ring untangling puzzle game.">
-  <title>Ring Escape - Relaxing Ring Puzzle</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Ring Escape – Free Ring Puzzle Game | Play Online</title>
+<meta name="description" content="Play Ring Escape, a free browser-based ring puzzle game. Learn the rules, solve challenging levels, develop logical thinking and master puzzle strategies.">
+<meta name="keywords" content="Ring Escape, ring puzzle game, free puzzle game, online logic game, brain puzzle, ring puzzle">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://ring-escape-puzzle-game.vercel.app/">
+<meta name="theme-color" content="#101827">
+
+<meta property="og:title" content="Ring Escape – Free Online Puzzle Game">
+<meta property="og:description" content="Challenge yourself with Ring Escape. Play, learn and solve increasingly challenging ring puzzles.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://ring-escape-puzzle-game.vercel.app/">
+
+<style>
+:root {
+  --bg:#101827;
+  --panel:#192538;
+  --panel2:#202f45;
+  --text:#f3f6fc;
+  --muted:#a9b6c9;
+  --blue:#638cff;
+  --cyan:#42d6d0;
+  --border:#304159;
+  --green:#42d69b;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  background:#0d1522;
+  color:var(--text);
+  line-height:1.7;
+}
+a{color:#8db1ff;text-decoration:none}
+a:hover{text-decoration:underline}
+button{font:inherit;cursor:pointer}
+header{
+  background:#111d2e;
+  border-bottom:1px solid var(--border);
+  position:sticky;
+  top:0;
+  z-index:20;
+}
+.nav{
+  max-width:1150px;
+  margin:auto;
+  padding:14px 20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+}
+.logo{font-size:22px;font-weight:900;letter-spacing:1px;color:white}
+.logo span{color:var(--cyan)}
+.navlinks{display:flex;gap:19px;flex-wrap:wrap;font-size:14px}
+.navlinks a{color:#d4deed}
+.menu-btn{display:none;background:transparent;color:white;border:0;font-size:25px}
+.container{max-width:1100px;margin:auto;padding:0 20px}
+.hero{
+  padding:75px 20px 55px;
+  text-align:center;
+  background:radial-gradient(ellipse at top,#243d65 0%,#101827 68%);
+}
+.eyebrow{
+  display:inline-block;
+  padding:6px 13px;
+  border:1px solid #47618a;
+  color:#b9d1ff;
+  border-radius:30px;
+  font-size:12px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+h1{font-size:clamp(36px,6vw,62px);line-height:1.12;margin:22px 0 15px}
+.hero p{max-width:700px;margin:0 auto;color:#c1cde0;font-size:18px}
+.btn{
+  display:inline-block;
+  border:0;
+  border-radius:10px;
+  padding:12px 22px;
+  font-weight:750;
+  background:var(--blue);
+  color:white;
+  margin:8px 5px;
+}
+.btn:hover{filter:brightness(1.12);text-decoration:none}
+.btn.secondary{background:#2a3a52;border:1px solid #52647d}
+.btn.green{background:#168b68}
+section{padding:55px 0;border-bottom:1px solid #26364b}
+.section-heading{text-align:center;margin-bottom:28px}
+.section-heading h2{font-size:32px;margin:0 0 8px}
+.section-heading p{color:var(--muted);margin:0}
+.card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:23px;
+}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:17px}
+.card h3{margin-top:0}
+.card p{color:#bac6d8}
+.game-shell{
+  max-width:850px;
+  margin:auto;
+  background:var(--panel);
+  border:1px solid #40516b;
+  border-radius:18px;
+  padding:22px;
+}
+.game-top{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+.stat{
+  background:#101b2b;
+  padding:9px 15px;
+  border-radius:9px;
+  color:#dce7fa;
+}
+#message{
+  text-align:center;
+  min-height:30px;
+  color:#b8d2ff;
+  margin:12px 0;
+}
+.board{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  align-items:end;
+  min-height:270px;
+  padding:20px 5px 10px;
+}
+.peg{
+  min-height:230px;
+  background:#101b2b;
+  border:2px solid #344863;
+  border-bottom:9px solid #7185a2;
+  border-radius:12px 12px 7px 7px;
+  display:flex;
+  flex-direction:column-reverse;
+  align-items:center;
+  justify-content:flex-start;
+  padding:10px 4px 4px;
+  position:relative;
+  cursor:pointer;
+}
+.peg.selected{border-color:var(--cyan);background:#142b3b}
+.peg-label{position:absolute;bottom:-36px;color:#b5c3d7;font-size:13px}
+.ring{
+  height:29px;
+  border-radius:9px;
+  margin:2px 0;
+  border:2px solid rgba(255,255,255,.35);
+  box-shadow:0 3px 7px #0005;
+  flex-shrink:0;
+}
+.ring:nth-child(1){background:#f1b84c}
+.ring:nth-child(2){background:#ef718c}
+.ring:nth-child(3){background:#6f9cff}
+.ring:nth-child(4){background:#40cdbd}
+.ring:nth-child(5){background:#ad84ed}
+.ring:nth-child(6){background:#f18a48}
+.ring:nth-child(7){background:#75c879}
+.controls{text-align:center;margin-top:35px}
+.controls button{margin:5px}
+.levels{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:20px 0}
+.level{
+  padding:9px 15px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:#111d2e;
+  color:white;
+}
+.level.active{background:var(--blue)}
+.content{max-width:850px;margin:auto}
+.content h3{margin-top:27px;color:#d8e4fa}
+.content p,.content li{color:#bdc9da}
+.content li{margin-bottom:8px}
+.faq-item{border-bottom:1px solid var(--border);padding:17px 0}
+.faq-item h3{margin:0 0 6px}
+footer{background:#0a111c;padding:35px 20px;text-align:center;color:#9eacc1}
+.footer-links{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin:15px 0}
+footer small{display:block;margin-top:15px}
+.notice{background:#142a3a;border-left:4px solid var(--cyan);padding:14px 17px;border-radius:5px;color:#d2e4ef}
+.page{display:none}
+.page.active{display:block}
+input,textarea{
+  display:block;
+  width:100%;
+  margin:8px 0 15px;
+  padding:12px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:#101b2b;
+  color:white;
+}
+@media(max-width:750px){
+  .nav{align-items:flex-start}
+  .menu-btn{display:block}
+  .navlinks{display:none;position:absolute;top:58px;left:0;right:0;background:#111d2e;padding:18px;flex-direction:column}
+  .navlinks.open{display:flex}
+  .grid{grid-template-columns:1fr}
+  .hero{padding-top:55px}
+  .game-shell{padding:13px}
+  .board{min-height:230px;gap:6px;padding-left:0;padding-right:0}
+  .peg{min-height:195px}
+  .ring{height:25px}
+}
+</style>
+
+<script type="application/ld+json">
+{
+ "@context":"https://schema.org",
+ "@type":"VideoGame",
+ "name":"Ring Escape",
+ "description":"A free browser-based ring puzzle game that challenges players to organize rings using logical moves.",
+ "genre":["Puzzle","Logic"],
+ "gamePlatform":"Web browser",
+ "applicationCategory":"Game"
+}
+</script>
 </head>
+
 <body>
-  <main class="app">
-    <header class="topbar">
-      <div class="brand">⭕ RING ESCAPE</div>
-      <div class="coins">🪙 <span id="coins">100</span></div>
-    </header>
+<header>
+ <nav class="nav">
+  <a href="#home" class="logo">RING<span>ESCAPE</span></a>
+  <button class="menu-btn" onclick="toggleMenu()" aria-label="Open navigation">☰</button>
+  <div class="navlinks" id="navlinks">
+   <a href="#home">Home</a>
+   <a href="#game">Play Game</a>
+   <a href="#how">How to Play</a>
+   <a href="#strategies">Strategies</a>
+   <a href="#guides">Guides</a>
+   <a href="#about">About</a>
+   <a href="#contact">Contact</a>
+  </div>
+ </nav>
+</header>
 
-    <section class="stats">
-      <div>LEVEL <strong id="level">1</strong></div>
-      <div>MOVES <strong id="moves">0</strong></div>
-      <div>BEST <strong id="best">0</strong></div>
-    </section>
+<main id="home">
+ <div class="hero">
+  <span class="eyebrow">Free Browser Puzzle Game</span>
+  <h1>Think Smart.<br>Move the Rings. Escape!</h1>
+  <p>
+   Welcome to Ring Escape, a logic puzzle experience where every move
+   matters. Organize the rings, plan your moves and complete each challenge.
+  </p>
+  <div style="margin-top:25px">
+   <a class="btn" href="#game">PLAY NOW</a>
+   <a class="btn secondary" href="#how">LEARN THE RULES</a>
+  </div>
+ </div>
 
-    <section class="game-card">
-      <div class="heading">
-        <h1>Untangle the Rings</h1>
-        <p>Rotate the rings until they can be separated!</p>
-      </div>
+ <section id="game">
+  <div class="container">
+   <div class="section-heading">
+    <h2>Play Ring Escape</h2>
+    <p>Move every ring from the first peg to the last peg.</p>
+   </div>
 
-      <div class="puzzle" id="puzzle">
-        <canvas id="gameCanvas"></canvas>
-      </div>
+   <div class="game-shell">
+    <div class="game-top">
+     <div class="stat">Level: <strong id="levelText">1</strong></div>
+     <div class="stat">Moves: <strong id="moves">0</strong></div>
+     <div class="stat">Minimum: <strong id="minimum">7</strong></div>
+    </div>
 
-      <div class="instructions">
-        Drag the rings or tap a ring to rotate it.
-      </div>
+    <div id="message" role="status" aria-live="polite">
+     Select a peg containing rings, then select another peg.
+    </div>
 
-      <div class="controls">
-        <button id="undo">↶ Undo</button>
-        <button id="hint">💡 Hint</button>
-        <button id="reset">↻ Reset</button>
-      </div>
+    <div class="board" id="board">
+     <div class="peg" data-peg="0" onclick="choosePeg(0)">
+      <span class="peg-label">START</span>
+     </div>
+     <div class="peg" data-peg="1" onclick="choosePeg(1)">
+      <span class="peg-label">MIDDLE</span>
+     </div>
+     <div class="peg" data-peg="2" onclick="choosePeg(2)">
+      <span class="peg-label">FINISH</span>
+     </div>
+    </div>
 
-      <button id="next" class="next-button" hidden>
-        NEXT LEVEL →
-      </button>
-    </section>
+    <div class="controls">
+     <button class="btn secondary" onclick="undoMove()">↶ Undo</button>
+     <button class="btn secondary" onclick="showHint()">💡 Hint</button>
+     <button class="btn secondary" onclick="resetGame()">↻ Reset</button>
+     <button class="btn green" onclick="nextLevel()">Next Level →</button>
+    </div>
 
-    <section class="bottom-info">
-      <div>🧠 Train your brain</div>
-      <div>✨ Relax and play</div>
-      <div>🏆 Beat your best</div>
-    </section>
+    <div class="levels">
+     <button class="level active" onclick="loadLevel(1)">Level 1</button>
+     <button class="level" onclick="loadLevel(2)">Level 2</button>
+     <button class="level" onclick="loadLevel(3)">Level 3</button>
+     <button class="level" onclick="loadLevel(4)">Level 4</button>
+    </div>
 
-    <footer>
-      <p>Ring Escape © 2026</p>
-      <a href="privacy.html">Privacy Policy</a>
-    </footer>
-  </main>
+    <p style="text-align:center;color:#aebdd2;font-size:13px">
+     Rule: A larger ring cannot be placed on top of a smaller ring.
+    </p>
+   </div>
+  </div>
+ </section>
 
-  <script src="game.js"></script>
+ <section id="how">
+  <div class="container content">
+   <div class="section-heading">
+    <h2>How to Play Ring Escape</h2>
+    <p>Learn the rules before starting your puzzle.</p>
+   </div>
+
+   <p>
+    Ring Escape uses three pegs and a collection of differently sized rings.
+    Your objective is to move the complete stack from the starting peg
+    to the finishing peg while following the movement rules.
+   </p>
+
+   <h3>Step 1: Understand the rings</h3>
+   <p>
+    The rings have different sizes. The largest ring begins at the bottom
+    of the starting stack, while the smallest ring begins at the top.
+   </p>
+
+   <h3>Step 2: Select a ring</h3>
+   <p>
+    Select the peg containing the ring you want to move. Only the top
+    ring on a peg can be moved.
+   </p>
+
+   <h3>Step 3: Choose another peg</h3>
+   <p>
+    Select the destination peg. You can move a ring onto an empty peg
+    or onto a larger ring. You cannot place a larger ring on a smaller one.
+   </p>
+
+   <h3>Step 4: Complete the challenge</h3>
+   <p>
+    Continue moving the rings until the entire stack reaches the finishing
+    peg. Try to complete the puzzle in the minimum possible number of moves.
+   </p>
+
+   <div class="notice">
+    Tip: Think about the next two or three moves before moving a ring.
+    Planning ahead can help you avoid unnecessary moves.
+   </div>
+  </div>
+ </section>
+
+ <section id="strategies">
+  <div class="container">
+   <div class="section-heading">
+    <h2>Ring Puzzle Strategies</h2>
+    <p>Practical techniques for planning your moves.</p>
+   </div>
+   <div class="grid">
+    <article class="card">
+     <h3>1. Think Before Moving</h3>
+     <p>Before making a move, identify where the ring needs to go and whether that move will block another ring.</p>
+    </article>
+    <article class="card">
+     <h3>2. Protect Smaller Rings</h3>
+     <p>Smaller rings are important because larger rings cannot be placed on them. Keep their position in mind.</p>
+    </article>
+    <article class="card">
+     <h3>3. Use the Middle Peg</h3>
+     <p>The middle peg is a temporary storage area. Use it to create space for moving larger rings.</p>
+    </article>
+    <article class="card">
+     <h3>4. Plan in Groups</h3>
+     <p>Break a complicated puzzle into smaller tasks. Move a group of rings before focusing on the next one.</p>
+    </article>
+    <article class="card">
+     <h3>5. Avoid Random Moves</h3>
+     <p>Random movement can increase your move count. Decide what you want to achieve before selecting a peg.</p>
+    </article>
+    <article class="card">
+     <h3>6. Learn from Mistakes</h3>
+     <p>Use the undo feature to review a move and try another approach when your current plan does not work.</p>
+    </article>
+   </div>
+  </div>
+ </section>
+
+ <section id="guides">
+  <div class="container content">
+   <div class="section-heading">
+    <h2>Ring Escape Learning Centre</h2>
+    <p>Understand the logic behind ring-moving puzzles.</p>
+   </div>
+
+   <h3>What makes a ring puzzle challenging?</h3>
+   <p>
+    Ring-moving puzzles are based on planning, sequencing and restrictions.
+    A move may appear useful at first but can make a later move difficult.
+    The challenge is to find a sequence that reaches the final arrangement
+    without breaking the rules.
+   </p>
+
+   <h3>Understanding the minimum move count</h3>
+   <p>
+    In the classic three-peg Tower of Hanoi puzzle, moving a complete stack
+    of n rings requires at least 2ⁿ − 1 moves. For example, three rings
+    require seven moves and four rings require fifteen moves.
+   </p>
+
+   <h3>Why is planning important?</h3>
+   <p>
+    Planning helps you understand which rings must move temporarily and
+    which peg should hold them. A good solution is not just about moving
+    a ring that is currently available. It is about preparing the board
+    for the moves that come next.
+   </p>
+
+   <h3>Beginner practice exercises</h3>
+   <ol>
+    <li>Complete a three-ring puzzle using the fewest moves possible.</li>
+    <li>Try completing the same puzzle without using the hint button.</li>
+    <li>Write down your planned moves before starting a new attempt.</li>
+    <li>Compare your move count with the theoretical minimum.</li>
+   </ol>
+
+   <h3>Common mistakes to avoid</h3>
+   <ul>
+    <li>Moving a ring without considering the next move.</li>
+    <li>Placing a large ring on a smaller ring.</li>
+    <li>Moving rings back and forth without a clear objective.</li>
+    <li>Ignoring the destination peg when planning a sequence.</li>
+   </ul>
+  </div>
+ </section>
+
+ <section id="faq">
+  <div class="container content">
+   <div class="section-heading">
+    <h2>Frequently Asked Questions</h2>
+    <p>Answers to common questions about Ring Escape.</p>
+   </div>
+   <div class="faq-item">
+    <h3>Is Ring Escape free to play?</h3>
+    <p>Yes. This browser version is free to play without requiring an account.</p>
+   </div>
+   <div class="faq-item">
+    <h3>Can I play on my phone?</h3>
+    <p>Yes. The game interface is designed to work on modern mobile browsers and desktop computers.</p>
+   </div>
+   <div class="faq-item">
+    <h3>Can I undo a move?</h3>
+    <p>Yes. Select Undo to reverse your previous move during the current puzzle.</p>
+   </div>
+   <div class="faq-item">
+    <h3>What is the minimum number of moves?</h3>
+    <p>For the classic three-peg puzzle, the minimum is 2ⁿ − 1, where n is the number of rings.</p>
+   </div>
+   <div class="faq-item">
+    <h3>Does Ring Escape require installation?</h3>
+    <p>No. You can play directly in a supported web browser.</p>
+   </div>
+   <div class="faq-item">
+    <h3>Does the game save my progress?</h3>
+    <p>This version does not currently save game progress after the browser is closed. Your current session can be played without creating an account.</p>
+   </div>
+  </div>
+ </section>
+
+ <section id="about">
+  <div class="container content">
+   <div class="section-heading">
+    <h2>About Ring Escape</h2>
+    <p>Our puzzle game and its purpose.</p>
+   </div>
+   <p>
+    Ring Escape is a browser-based puzzle project created to provide
+    an accessible way to practise logical thinking and sequential planning.
+    The game uses a ring-moving challenge with simple rules and increasing
+    levels of difficulty.
+   </p>
+   <p>
+    Our goal is to make puzzle-solving easy to understand for beginners
+    while providing opportunities to improve move efficiency and planning.
+    Players can practise at their own pace using the game controls and
+    learning materials on this website.
+   </p>
+   <p>
+    The website is being maintained with the aim of improving gameplay,
+    accessibility, instructions and the overall visitor experience.
+   </p>
+  </div>
+ </section>
+
+ <section id="contact">
+  <div class="container content">
+   <div class="section-heading">
+    <h2>Contact Us</h2>
+    <p>Questions, feedback or suggestions about Ring Escape?</p>
+   </div>
+   <p>
+    We welcome genuine feedback about gameplay, website accessibility,
+    technical problems and possible improvements.
+   </p>
+   <p>
+    Contact the website owner using the email address published here:
+   </p>
+   <p><strong>Website owner:</strong> Replace this section with your real contact email before publishing.</p>
+  </div>
+ </section>
+
+ <section id="privacy">
+  <div class="container content">
+   <div class="section-heading">
+    <h2>Privacy Policy</h2>
+    <p>How website information is handled.</p>
+   </div>
+   <p><strong>Last updated: November 25, 2026</strong></p>
+   <h3>Information we collect</h3>
+   <p>
+    This version of Ring Escape does not require visitors to register
+    or create an account. The game operates in the browser and does not
+    ask for a player's name, address or telephone number.
+   </p>
+   <h3>Cookies and advertising</h3>
+   <p>
+    If advertising services such as Google AdSense are enabled, Google
+    and its advertising partners may use cookies or similar technologies
+    to serve, measure and personalize advertisements, subject to applicable
+    settings, consent requirements and Google's policies.
+   </p>
+   <p>
+    Visitors can review Google's advertising and privacy information at
+    <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">Google Advertising Policies and Technologies</a>.
+   </p>
+   <h3>Third-party services</h3>
+   <p>
+    This website may use third-party hosting, analytics or advertising
+    services. Those providers may process technical information under
+    their own privacy policies.
+   </p>
+   <h3>Children's privacy</h3>
+   <p>
+    This website is not intended to knowingly collect personal information
+    from children. If you believe personal information has been submitted
+    through this website, contact the website owner.
+   </p>
+   <h3>Policy changes</h3>
+   <p>
+    This policy may be updated when website features or applicable
+    requirements change. The updated version will be published on this page.
+   </p>
+   <h3>Contact</h3>
+   <p>Replace this text with your real contact email before publishing.</p>
+  </div>
+ </section>
+
+ <section id="terms">
+  <div class="container content">
+   <div class="section-heading">
+    <h2>Terms of Use</h2>
+    <p>Rules for using this website.</p>
+   </div>
+   <p><strong>Last updated: November 25, 2026</strong></p>
+   <h3>Acceptable use</h3>
+   <p>
+    You may use Ring Escape for personal, non-commercial entertainment
+    and puzzle practice. You agree not to misuse the website or interfere
+    with its operation.
+   </p>
+   <h3>Game availability</h3>
+   <p>
+    We aim to keep the game available and functional, but cannot guarantee
+    uninterrupted service or compatibility with every device.
+   </p>
+   <h3>Intellectual property</h3>
+   <p>
+    Website text, original design elements and original game code belong
+    to their respective owners. Do not copy or redistribute material
+    without permission where permission is required.
+   </p>
+   <h3>External websites</h3>
+   <p>
+    Links to third-party websites are provided for convenience. We do
+    not control their content or privacy practices.
+   </p>
+   <h3>Changes to these terms</h3>
+   <p>
+    These terms may be revised as the website develops. Continued use
+    of the website after changes are published constitutes acceptance
+    where permitted by applicable law.
+   </p>
+   <h3>Contact</h3>
+   <p>Replace this text with your real contact email before publishing.</p>
+  </div>
+ </section>
+</main>
+
+<footer>
+ <div class="logo">RING<span>ESCAPE</span></div>
+ <div class="footer-links">
+  <a href="#home">Home</a>
+  <a href="#game">Play</a>
+  <a href="#about">About</a>
+  <a href="#contact">Contact</a>
+  <a href="#privacy">Privacy Policy</a>
+  <a href="#terms">Terms of Use</a>
+ </div>
+ <p>A browser-based ring puzzle game and learning experience.</p>
+ <small>© 2026 Ring Escape. All rights reserved.</small>
+</footer>
+
+<script>
+let level=1;
+let rings=3;
+let pegs=[[],[],[]];
+let moves=0;
+let selected=null;
+let history=[];
+let hints=[
+ "Move the smallest ring to the finishing peg first.",
+ "Use the middle peg to make room for larger rings.",
+ "Move the smaller stack before transferring the largest ring."
+];
+
+function minimumMoves(n){return Math.pow(2,n)-1;}
+
+function loadLevel(n){
+ level=Math.max(1,Math.min(4,n));
+ rings=level+2;
+ resetGame();
+ document.getElementById("levelText").textContent=level;
+ document.getElementById("minimum").textContent=minimumMoves(rings);
+ document.querySelectorAll(".level").forEach((b,i)=>{
+  b.classList.toggle("active",i===level-1);
+ });
+}
+
+function resetGame(){
+ pegs=[[],[],[]];
+ for(let i=rings;i>=1;i--)pegs[0].push(i);
+ moves=0;
+ selected=null;
+ history=[];
+ updateBoard();
+ message("Puzzle reset. Move all rings to the FINISH peg.");
+}
+
+function message(text){
+ document.getElementById("message").textContent=text;
+}
+
+function choosePeg(index){
+ if(selected===null){
+  if(pegs[index].length===0){
+   message("Choose a peg that contains a ring.");
+   return;
+  }
+  selected=index;
+  message("Now choose a destination peg.");
+  updateBoard();
+  return;
+ }
+ if(selected===index){
+  selected=null;
+  message("Selection cancelled.");
+  updateBoard();
+  return;
+ }
+
+ const source=pegs[selected];
+ const destination=pegs[index];
+ const ring=source[source.length-1];
+ const top=destination[destination.length-1];
+
+ if(top!==undefined && top<ring){
+  message("Invalid move! A larger ring cannot go on a smaller ring.");
+  selected=null;
+  updateBoard();
+  return;
+ }
+
+ history.push({
+  pegs:pegs.map(p=>[...p]),
+  moves:moves
+ });
+ destination.push(source.pop());
+ moves++;
+ selected=null;
+ updateBoard();
+
+ if(pegs[2].length===rings){
+  message("Congratulations! You completed Level "+level+" in "+moves+" moves!");
+ }else{
+  message("Good move! Keep planning your next step.");
+ }
+}
+
+function updateBoard(){
+ document.getElementById("moves").textContent=moves;
+ const board=document.getElementById("board");
+ board.querySelectorAll(".peg").forEach((peg,i)=>{
+  peg.classList.toggle("selected",selected===i);
+  peg.innerHTML='<span class="peg-label">'+
+   ["START","MIDDLE","FINISH"][i]+'</span>';
+
+  pegs[i].forEach(size=>{
+   const ring=document.createElement("div");
+   ring.className="ring";
+   ring.style.width=(34+size*25)+"px";
+   ring.title="Ring size "+size;
+   peg.appendChild(ring);
+  });
+ });
+}
+
+function undoMove(){
+ if(history.length===0){
+  message("There are no moves to undo.");
+  return;
+ }
+ const previous=history.pop();
+ pegs=previous.pegs;
+ moves=previous.moves;
+ selected=null;
+ updateBoard();
+ message("Previous move reversed.");
+}
+
+function showHint(){
+ if(pegs[2].length===rings){
+  message("You have already completed this puzzle!");
+  return;
+ }
+ if(selected!==null){
+  message("Choose a destination peg for your selected ring.");
+  return;
+ }
+ message("Hint: "+hints[(level-1)%hints.length]);
+}
+
+function nextLevel(){
+ if(pegs[2].length!==rings){
+  message("Complete the current puzzle before moving to the next level.");
+  return;
+ }
+ if(level<4){
+  loadLevel(level+1);
+ }else{
+  message("You have completed all available levels. Excellent work!");
+ }
+}
+
+function toggleMenu(){
+ document.getElementById("navlinks").classList.toggle("open");
+}
+
+document.querySelectorAll(".navlinks a").forEach(link=>{
+ link.addEventListener("click",()=>{
+  document.getElementById("navlinks").classList.remove("open");
+ });
+});
+
+loadLevel(1);
+</script>
 </body>
 </html>

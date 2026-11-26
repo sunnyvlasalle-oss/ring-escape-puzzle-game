@@ -1,0 +1,5 @@
+
+User-agent: *
+Allow: /
+
+Sitemap: https://ring-escape-puzzle-game.vercel.app/sitemap.xml
